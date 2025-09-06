@@ -23,8 +23,8 @@ Um gerenciador de senhas simples e seguro desenvolvido em Python com interface g
 
 1. Clone o repositório:
 ```bash
-git clone https://github.com/seu-usuario/password-manager.git
-cd password-manager
+git clone https://github.com/xBrunomvs/PasskeyManager.git
+cd PasskeyManager
 ```
 
 2. Execute o aplicativo:
