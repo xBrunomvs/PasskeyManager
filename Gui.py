@@ -2,18 +2,19 @@ import tkinter as tk
 from tkinter import ttk, messagebox, simpledialog
 from ttkthemes import ThemedTk, ThemedStyle
 from DataManager import DataManager
-
+from Config import Config
 
 class PasswordManagerGUI:
     """Classe responsável pela interface gráfica com suporte a temas"""
 
     def __init__(self, root=None):
+        self.config = Config("config.json")
         # Se não foi passado um root, criar um ThemedTk
         if root is None:
             self.root = ThemedTk(theme="arc")  # Tema padrão moderno
         else:
             self.root = root
-
+        self.config.read_config()
         self.root.title("Email and Password Manager")
         self.root.geometry("900x650")
         self.root.minsize(700, 500)
@@ -21,7 +22,7 @@ class PasswordManagerGUI:
         # Configurar estilo se não for ThemedTk
         if not isinstance(self.root, ThemedTk):
             self.style = ThemedStyle(self.root)
-            self.style.set_theme("arc")  # Tema padrão
+            self.style.set_theme(self.config.theme)  # Tema padrão
         else:
             self.style = None
 
@@ -38,7 +39,11 @@ class PasswordManagerGUI:
         try:
             if isinstance(self.root, ThemedTk):
                 self.root.set_theme(theme_name)
+                self.config.theme = theme_name
+                self.config.set_theme()
             elif self.style:
+                self.config.theme = theme_name
+                self.config.set_theme()
                 self.style.set_theme(theme_name)
 
             # Forçar atualização da interface
@@ -94,7 +99,7 @@ class PasswordManagerGUI:
         theme_combo.bind("<<ComboboxSelected>>", lambda e: self.change_theme(self.theme_var.get()))
 
         # Definir tema atual
-        current_theme = "arc"  # padrão
+        current_theme = self.config.theme  # padrão
         if isinstance(self.root, ThemedTk):
             try:
                 current_theme = self.root.tk.call("ttk::style", "theme", "use")
